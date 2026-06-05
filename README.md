@@ -19,6 +19,8 @@ The demo uses public Y1-style petroleum context files, builds an in-memory SQLit
 
 The screenshots below focus on the AI-assisted review and text-to-SQL workflow.
 
+![FieldViewer AI Lab selected-well response](screenshots/1.png)
+
 ![FieldViewer AI Lab question interface](screenshots/fieldviewer-ai-lab-text-to-sql.png)
 
 ![Validated text-to-SQL workflow](screenshots/text-to-sql-validated-workflow.png)
