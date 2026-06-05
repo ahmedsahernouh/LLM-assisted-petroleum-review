@@ -17,15 +17,11 @@ The demo uses public Y1-style petroleum context files, builds an in-memory SQLit
 
 ## Screenshots
 
-The screenshots below come from the FieldViewer Y1 demo context used to shape the petroleum review data model.
+The screenshots below focus on the AI-assisted review and text-to-SQL workflow.
 
-![Y1 map view](screenshots/fieldviewer-y1-map.png)
+![FieldViewer AI Lab question interface](screenshots/fieldviewer-ai-lab-text-to-sql.png)
 
-![Y1 production view](screenshots/fieldviewer-y1-production.png)
-
-![Y1 timeline view](screenshots/fieldviewer-y1-timeline.png)
-
-![Y1 status dashboard](screenshots/fieldviewer-y1-status-dashboard.png)
+![Validated text-to-SQL workflow](screenshots/text-to-sql-validated-workflow.png)
 
 ## Repository Structure
 
@@ -96,4 +92,3 @@ If an LLM provider is added later, keep credentials outside the repository in en
 ## Data Note
 
 The included JSON files are compact public demo context files. They are representative of a petroleum review workflow and are intentionally smaller than a full operating database.
-
