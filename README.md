@@ -1,0 +1,99 @@
+# LLM-assisted petroleum review
+
+## text-to-SQL
+
+Standalone demonstration of a controlled LLM-assisted petroleum data review workflow. The project extracts the AI assistance and safe text-to-SQL pattern from FieldViewer into a smaller public repository that can be reviewed, run, and extended independently.
+
+The demo uses public Y1-style petroleum context files, builds an in-memory SQLite database, exposes only AI-visible views, validates generated SQL, and summarizes results only after validation and execution.
+
+## What This Shows
+
+- Natural-language petroleum questions mapped to SQL candidates.
+- Compact schema context designed for LLM prompting.
+- SELECT-only SQL validation before execution.
+- Hidden-table protection for non-AI-visible data.
+- Deterministic offline fallback so the workflow runs without API keys.
+- A representative notebook that walks through the full process cell by cell.
+
+## Screenshots
+
+The screenshots below come from the FieldViewer Y1 demo context used to shape the petroleum review data model.
+
+![Y1 map view](screenshots/fieldviewer-y1-map.png)
+
+![Y1 production view](screenshots/fieldviewer-y1-production.png)
+
+![Y1 timeline view](screenshots/fieldviewer-y1-timeline.png)
+
+![Y1 status dashboard](screenshots/fieldviewer-y1-status-dashboard.png)
+
+## Repository Structure
+
+```text
+llm_petroleum_review/
+  database.py       Build the demo SQLite database and schema context.
+  sql_guard.py      Validate generated SQL before execution.
+  text_to_sql.py    Generate, validate, execute, and summarize answers.
+data/y1_ai_context/
+  *.json            Public demo context used by the notebook and module.
+notebooks/
+  llm_assisted_petroleum_review_text_to_sql.ipynb
+screenshots/
+  *.png             Explanatory screenshots copied from the Y1 demo.
+```
+
+## Quick Start
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+jupyter notebook notebooks\llm_assisted_petroleum_review_text_to_sql.ipynb
+```
+
+The core module uses only the Python standard library. `pandas` is included for notebook users who want to extend the analysis tables.
+
+## Programmatic Example
+
+```python
+from llm_petroleum_review.database import build_demo_database
+from llm_petroleum_review.text_to_sql import answer_question
+
+connection = build_demo_database()
+response = answer_question(connection, "How many wells are there by reservoir?")
+
+print(response["generated_sql"])
+print(response["answer"])
+```
+
+## Safety Pattern
+
+The SQL workflow follows this sequence:
+
+```text
+User question
+-> schema context
+-> candidate SQL
+-> SELECT-only validator
+-> safe SQLite execution
+-> result-only summary
+```
+
+The validator rejects:
+
+- write/admin statements such as `INSERT`, `UPDATE`, `DELETE`, `DROP`, `ALTER`, and `PRAGMA`
+- multiple statements
+- dangerous keywords hidden inside SQL comments
+- AI-hidden tables such as `audit_log`
+- unbounded reads by applying a default `LIMIT`
+
+## API Keys
+
+No API keys are included or required. The notebook runs with deterministic SQL generation so reviewers can inspect the architecture without network access or paid model credentials.
+
+If an LLM provider is added later, keep credentials outside the repository in environment variables and keep the same validation boundary: the model proposes SQL text, but it never receives a database connection and never executes SQL directly.
+
+## Data Note
+
+The included JSON files are compact public demo context files. They are representative of a petroleum review workflow and are intentionally smaller than a full operating database.
+

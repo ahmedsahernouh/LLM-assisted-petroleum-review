@@ -1,0 +1,82 @@
+{
+  "categories": [
+    {
+      "category_id": "wells",
+      "display_name": "Wells",
+      "available": true,
+      "source_files": [
+        "config/settings.txt",
+        "Data/Y1_Production.csv",
+        "Data/Y1_Well_ID.csv",
+        "Data/Y1_well_test_summary_normalized.csv"
+      ],
+      "record_count": 105,
+      "notes": "Auto-detected well names and optional coordinates."
+    },
+    {
+      "category_id": "map_layers",
+      "display_name": "Map Layers",
+      "available": true,
+      "source_files": [
+        "App/grids/grids_index.json",
+        "Data/KeyMapContents.txt",
+        "fieldviewer.instance.json"
+      ],
+      "record_count": 10,
+      "notes": "Auto-detected layers from manifest and generated metadata."
+    },
+    {
+      "category_id": "production",
+      "display_name": "Production",
+      "available": true,
+      "source_files": [
+        "Data/Y1_Production.csv",
+        "Data/Y1_Well_ID.csv"
+      ],
+      "record_count": 105,
+      "notes": "Compact production metadata only; full tables are excluded."
+    },
+    {
+      "category_id": "timeline",
+      "display_name": "Timeline",
+      "available": true,
+      "source_files": [
+        "Data/Y1_Production.csv"
+      ],
+      "record_count": 91130,
+      "notes": "Timeline events are sampled from detected date columns."
+    },
+    {
+      "category_id": "screen_context",
+      "display_name": "Screen Context",
+      "available": true,
+      "source_files": [
+        "raw/screen_contexts.json"
+      ],
+      "record_count": 5,
+      "notes": "Generated descriptions for core FieldViewer screens."
+    },
+    {
+      "category_id": "ai_lab",
+      "display_name": "AI Lab",
+      "available": true,
+      "source_files": [
+        "App/FieldViewer_AI_Lab.html",
+        "bundles/custom_compact.md"
+      ],
+      "record_count": 1,
+      "notes": "Isolated prototype page using compact backend context."
+    },
+    {
+      "category_id": "limitations",
+      "display_name": "Limitations",
+      "available": true,
+      "source_files": [
+        "raw/limitations.json"
+      ],
+      "record_count": 1,
+      "notes": "Global constraints for safe demo answers."
+    }
+  ],
+  "generated_at": "2026-05-20T05:18:55Z"
+}

@@ -1,0 +1,51 @@
+{
+  "screens": [
+    {
+      "screen_id": "menu",
+      "display_name": "FieldViewer Menu",
+      "description": "Main navigation page for the generated FieldViewer instance.",
+      "related_context_files": [
+        "App/menu.html",
+        "raw/data_catalog.json"
+      ]
+    },
+    {
+      "screen_id": "fieldviewer_map",
+      "display_name": "Subsurface Map Viewer",
+      "description": "Primary generated map page for wells, basemap, grids, polygons, and subsurface context.",
+      "related_context_files": [
+        "App/FieldViewer.html",
+        "raw/wells_summary.json",
+        "raw/layers_summary.json"
+      ]
+    },
+    {
+      "screen_id": "production_profile",
+      "display_name": "Production Profile",
+      "description": "Generated production analysis page for available production summaries and profiles.",
+      "related_context_files": [
+        "App/FieldViewer_production.html",
+        "raw/production_summary.json"
+      ]
+    },
+    {
+      "screen_id": "timeline",
+      "display_name": "Field Timeline",
+      "description": "Generated timeline page for compact field and well-event chronology.",
+      "related_context_files": [
+        "App/FieldViewer_timeline.html",
+        "raw/timeline_summary.json"
+      ]
+    },
+    {
+      "screen_id": "ai_lab",
+      "display_name": "FieldViewer AI Lab",
+      "description": "Isolated AI prototype page that sends compact deterministic context to the backend.",
+      "related_context_files": [
+        "App/FieldViewer_AI_Lab.html",
+        "bundles/custom_compact.md"
+      ]
+    }
+  ],
+  "generated_at": "2026-05-20T05:18:55Z"
+}

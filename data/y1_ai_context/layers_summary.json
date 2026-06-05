@@ -1,0 +1,128 @@
+{
+  "layer_count": 10,
+  "layers": [
+    {
+      "layer_id": "wells",
+      "display_name": "Wells",
+      "layer_type": "well",
+      "category": "map_layers",
+      "description": "Auto-detected well location layer.",
+      "source_files": [
+        "config/settings.txt",
+        "Data/Y1_Production.csv",
+        "Data/Y1_Well_ID.csv",
+        "Data/Y1_well_test_summary_normalized.csv"
+      ],
+      "data_quality": "auto_generated_demo_context"
+    },
+    {
+      "layer_id": "basemap_tiles",
+      "display_name": "XYZ Tiles",
+      "layer_type": "basemap",
+      "category": "map_layers",
+      "description": "Configured FieldViewer basemap tile layer.",
+      "source_files": [
+        "fieldviewer.instance.json"
+      ],
+      "data_quality": "auto_generated_demo_context"
+    },
+    {
+      "layer_id": "grid_bcu",
+      "display_name": "BCU",
+      "layer_type": "grid",
+      "category": "map_layers",
+      "description": "Auto-detected generated grid layer metadata.",
+      "source_files": [
+        "App/grids/grids_index.json",
+        "App/grids/BCU/grid_meta.json"
+      ],
+      "data_quality": "auto_generated_demo_context"
+    },
+    {
+      "layer_id": "grid_xnsdem",
+      "display_name": "XNS_DEM",
+      "layer_type": "grid",
+      "category": "map_layers",
+      "description": "Auto-detected generated grid layer metadata.",
+      "source_files": [
+        "App/grids/grids_index.json",
+        "App/grids/XNS_DEM/grid_meta.json"
+      ],
+      "data_quality": "auto_generated_demo_context"
+    },
+    {
+      "layer_id": "grid_xsetived",
+      "display_name": "XSEtive_D",
+      "layer_type": "grid",
+      "category": "map_layers",
+      "description": "Auto-detected generated grid layer metadata.",
+      "source_files": [
+        "App/grids/grids_index.json",
+        "App/grids/XSEtive_D/grid_meta.json"
+      ],
+      "data_quality": "auto_generated_demo_context"
+    },
+    {
+      "layer_id": "grid_xsnessd",
+      "display_name": "XSNess_D",
+      "layer_type": "grid",
+      "category": "map_layers",
+      "description": "Auto-detected generated grid layer metadata.",
+      "source_files": [
+        "App/grids/grids_index.json",
+        "App/grids/XSNess_D/grid_meta.json"
+      ],
+      "data_quality": "auto_generated_demo_context"
+    },
+    {
+      "layer_id": "grid_xstarbertd",
+      "display_name": "XSTarbert_D",
+      "layer_type": "grid",
+      "category": "map_layers",
+      "description": "Auto-detected generated grid layer metadata.",
+      "source_files": [
+        "App/grids/grids_index.json",
+        "App/grids/XSTarbert_D/grid_meta.json"
+      ],
+      "data_quality": "auto_generated_demo_context"
+    },
+    {
+      "layer_id": "grid_xstarbertd2",
+      "display_name": "XSTarbert_D2",
+      "layer_type": "grid",
+      "category": "map_layers",
+      "description": "Auto-detected generated grid layer metadata.",
+      "source_files": [
+        "App/grids/grids_index.json",
+        "App/grids/XSTarbert_D2/grid_meta.json"
+      ],
+      "data_quality": "auto_generated_demo_context"
+    },
+    {
+      "layer_id": "polygon_y1polygonskeymaptxt",
+      "display_name": "Y1_polygons_keymap.txt",
+      "layer_type": "polygon",
+      "category": "map_layers",
+      "description": "Auto-detected polygon or boundary layer from the key map list.",
+      "source_files": [
+        "Data/KeyMapContents.txt"
+      ],
+      "data_quality": "auto_generated_demo_context"
+    },
+    {
+      "layer_id": "polygon_xs3dkeymaptxt",
+      "display_name": "XS_3D_keymap.txt",
+      "layer_type": "polygon",
+      "category": "map_layers",
+      "description": "Auto-detected polygon or boundary layer from the key map list.",
+      "source_files": [
+        "Data/KeyMapContents.txt"
+      ],
+      "data_quality": "auto_generated_demo_context"
+    }
+  ],
+  "generated_at": "2026-05-20T05:18:55Z",
+  "notes": [
+    "Layer names are auto-detected from manifest and generated viewer metadata."
+  ]
+}

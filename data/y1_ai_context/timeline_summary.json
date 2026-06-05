@@ -1,0 +1,79 @@
+{
+  "available": true,
+  "event_count": 91130,
+  "date_range": {
+    "start": "1943-03-28",
+    "end": "1998-01-01"
+  },
+  "key_events": [
+    {
+      "date": "1943-03-28",
+      "title": "XN1-1 Spuddate",
+      "category": "Spuddate",
+      "description": "Auto-detected timeline date from instance data."
+    },
+    {
+      "date": "1943-03-28",
+      "title": "XN1-1 Spuddate",
+      "category": "Spuddate",
+      "description": "Auto-detected timeline date from instance data."
+    },
+    {
+      "date": "1943-03-28",
+      "title": "XN1-1 Spuddate",
+      "category": "Spuddate",
+      "description": "Auto-detected timeline date from instance data."
+    },
+    {
+      "date": "1943-03-28",
+      "title": "XN1-1 Spuddate",
+      "category": "Spuddate",
+      "description": "Auto-detected timeline date from instance data."
+    },
+    {
+      "date": "1943-03-28",
+      "title": "XN1-1 Spuddate",
+      "category": "Spuddate",
+      "description": "Auto-detected timeline date from instance data."
+    },
+    {
+      "date": "1943-03-28",
+      "title": "XN1-1 Spuddate",
+      "category": "Spuddate",
+      "description": "Auto-detected timeline date from instance data."
+    },
+    {
+      "date": "1943-03-28",
+      "title": "XN1-1 Spuddate",
+      "category": "Spuddate",
+      "description": "Auto-detected timeline date from instance data."
+    },
+    {
+      "date": "1943-03-28",
+      "title": "XN1-1 Spuddate",
+      "category": "Spuddate",
+      "description": "Auto-detected timeline date from instance data."
+    },
+    {
+      "date": "1943-03-28",
+      "title": "XN1-1 Spuddate",
+      "category": "Spuddate",
+      "description": "Auto-detected timeline date from instance data."
+    },
+    {
+      "date": "1943-03-28",
+      "title": "XN1-1 Spuddate",
+      "category": "Spuddate",
+      "description": "Auto-detected timeline date from instance data."
+    }
+  ],
+  "source_files": [
+    "Data/Y1_Production.csv"
+  ],
+  "data_quality": "auto_generated_demo_context",
+  "notes": [
+    "Timeline events are auto-detected from compact date columns where available.",
+    "Key events are sampled to a maximum of 10 records."
+  ],
+  "generated_at": "2026-05-20T05:18:55Z"
+}
