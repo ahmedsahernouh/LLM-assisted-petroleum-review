@@ -60,23 +60,35 @@ def _contains_multiple_statements(sql: str) -> bool:
     return ";" in masked
 
 
-def _hidden_tables(connection: sqlite3.Connection | None) -> set[str]:
+def _ai_visibility(connection: sqlite3.Connection | None) -> tuple[set[str], set[str]]:
     if connection is None:
-        return set()
+        return set(), set()
     try:
         rows = connection.execute(
-            "SELECT table_name FROM table_metadata WHERE is_ai_visible = 0"
+            "SELECT table_name, is_ai_visible FROM table_metadata"
         ).fetchall()
     except sqlite3.Error:
-        return set()
-    return {str(row["table_name"]) for row in rows}
+        return set(), set()
+    visible = {str(row["table_name"]) for row in rows if int(row["is_ai_visible"] or 0) == 1}
+    hidden = {str(row["table_name"]) for row in rows if int(row["is_ai_visible"] or 0) == 0}
+    return visible, hidden
 
 
 def _referenced_tables(sql: str) -> set[str]:
     masked = _mask_string_literals(sql)
+    cte_names = {
+        match.group(1)
+        for match in re.finditer(
+            r"(?:\bwith\b|,)\s*([A-Za-z_][A-Za-z0-9_]*)\s+as\s*\(",
+            masked,
+            flags=re.IGNORECASE,
+        )
+    }
     names: set[str] = set()
     for match in re.finditer(r"\b(?:from|join)\s+([A-Za-z_][A-Za-z0-9_\.]*)", masked, flags=re.IGNORECASE):
-        names.add(match.group(1).split(".")[-1])
+        name = match.group(1).split(".")[-1]
+        if name not in cte_names:
+            names.add(name)
     return names
 
 
@@ -127,9 +139,20 @@ def validate_sql(
     if keyword:
         return {"ok": False, "sql": clean, "message": f"Forbidden SQL keyword: {keyword.upper()}.", "limit_applied": False}
 
-    hidden = sorted(_referenced_tables(clean) & _hidden_tables(connection))
+    visible_tables, hidden_tables = _ai_visibility(connection)
+    referenced_tables = _referenced_tables(clean)
+    hidden = sorted(referenced_tables & hidden_tables)
     if hidden:
         return {"ok": False, "sql": clean, "message": "Table is not AI-visible: " + ", ".join(hidden), "limit_applied": False}
+    if visible_tables:
+        not_visible = sorted(referenced_tables - visible_tables)
+        if not_visible:
+            return {
+                "ok": False,
+                "sql": clean,
+                "message": "Table is not AI-visible: " + ", ".join(not_visible),
+                "limit_applied": False,
+            }
 
     bounded_sql, limit_applied, message = _apply_limit(clean, default_limit, max_limit)
     return {"ok": True, "sql": bounded_sql, "message": message, "limit_applied": limit_applied}
@@ -141,4 +164,3 @@ def _has_forbidden_keyword(text: str) -> str | None:
         if re.search(rf"\b{re.escape(keyword)}\b", masked):
             return keyword
     return None
-

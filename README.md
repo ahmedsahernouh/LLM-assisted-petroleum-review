@@ -51,6 +51,16 @@ jupyter notebook notebooks\llm_assisted_petroleum_review_text_to_sql.ipynb
 
 The core module uses only the Python standard library. `pandas` is included for notebook users who want to extend the analysis tables.
 
+## Validation Check
+
+Run the standalone diagnostic after changing schema metadata, generated SQL patterns, or the SQL guard:
+
+```powershell
+python tools\check_demo_sql_schema.py
+```
+
+The check verifies that the compact schema context matches the actual SQLite views, deterministic SQL does not use undeclared columns, hidden/internal tables are rejected, and safe CTE queries still validate.
+
 ## Programmatic Example
 
 ```python
@@ -82,8 +92,10 @@ The validator rejects:
 - write/admin statements such as `INSERT`, `UPDATE`, `DELETE`, `DROP`, `ALTER`, and `PRAGMA`
 - multiple statements
 - dangerous keywords hidden inside SQL comments
-- AI-hidden tables such as `audit_log`
+- AI-hidden or internal tables such as `audit_log`, `wells`, `table_metadata`, and `column_metadata`
 - unbounded reads by applying a default `LIMIT`
+
+The compact schema context is built from the actual SQLite view declarations and enriched with metadata. Generated SQL should only use tables and columns declared in that context.
 
 ## API Keys
 

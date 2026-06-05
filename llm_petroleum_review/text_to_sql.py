@@ -51,7 +51,7 @@ def generate_sql(question: str, schema_context: dict[str, Any] | None = None) ->
             "warnings": warnings,
         }
     return {
-        "sql": "SELECT table_name, display_name, description FROM table_metadata WHERE is_ai_visible = 1 ORDER BY table_name",
+        "sql": "SELECT table_name, display_name, description FROM v_schema_tables ORDER BY table_name",
         "reasoning": "Fallback lists AI-visible schema options instead of inventing SQL.",
         "warnings": warnings + ["question_not_mapped_to_specific_domain_pattern"],
     }
@@ -108,4 +108,3 @@ def answer_question(connection: sqlite3.Connection, question: str) -> dict[str, 
         "result": result,
         "answer": summarize_result(question, result),
     }
-

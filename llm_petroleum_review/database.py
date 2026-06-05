@@ -130,6 +130,11 @@ def _create_schema(connection: sqlite3.Connection) -> None:
         CREATE VIEW v_timeline_events AS
         SELECT event_name, event_date, category, description
         FROM timeline_events;
+
+        CREATE VIEW v_schema_tables AS
+        SELECT table_name, display_name, description
+        FROM table_metadata
+        WHERE is_ai_visible = 1;
         """
     )
 
@@ -228,8 +233,11 @@ def _seed_metadata(connection: sqlite3.Connection) -> None:
         ("v_layer_catalog", "Layer catalog", "Safe view of map and grid layers available in the petroleum review app.", "one row per layer", 1),
         ("v_production_entities", "Production entities", "Safe view of wells with compact production context availability.", "one row per producing well name", 1),
         ("v_timeline_events", "Timeline events", "Safe view of compact field and well timeline events.", "one row per event", 1),
-        ("wells", "Raw wells", "Source well table used to build the safe well view.", "one row per well", 1),
+        ("v_schema_tables", "AI-visible schema tables", "Safe view listing tables and views available for generated SQL.", "one row per AI-visible table or view", 1),
+        ("wells", "Raw wells", "Source well table used to build the safe well view.", "one row per well", 0),
         ("audit_log", "Audit log", "Operational trace table hidden from AI-generated SQL.", "one row per audit event", 0),
+        ("table_metadata", "Table metadata", "Internal semantic metadata table.", "one row per table", 0),
+        ("column_metadata", "Column metadata", "Internal semantic column metadata table.", "one row per table column", 0),
     ]
     connection.executemany("INSERT INTO table_metadata VALUES (?, ?, ?, ?, ?)", tables)
 
@@ -237,15 +245,40 @@ def _seed_metadata(connection: sqlite3.Connection) -> None:
         ("v_well_locations", "well_name", "Well identifier.", None, 1),
         ("v_well_locations", "x_utm", "Easting coordinate.", "m", 1),
         ("v_well_locations", "y_utm", "Northing coordinate.", "m", 1),
+        ("v_well_locations", "crs", "Coordinate reference system label.", None, 1),
         ("v_well_locations", "status", "Well status from configured map hover fields.", None, 1),
         ("v_well_locations", "reservoir", "Reservoir name from configured map hover fields.", None, 1),
+        ("v_well_locations", "well_type", "Well type from configured map hover fields.", None, 1),
+        ("v_well_locations", "spud_date", "Spud date from configured map hover fields.", None, 1),
+        ("v_well_locations", "last_production", "Last production date from configured map hover fields.", None, 1),
+        ("v_layer_catalog", "layer_id", "Stable layer identifier.", None, 1),
         ("v_layer_catalog", "display_name", "Layer display name.", None, 1),
         ("v_layer_catalog", "layer_type", "Layer type such as well, basemap, or grid.", None, 1),
+        ("v_layer_catalog", "category", "Layer category used by the review app.", None, 1),
+        ("v_layer_catalog", "description", "Human-readable layer description.", None, 1),
         ("v_production_entities", "well_name", "Well with compact production context.", None, 1),
+        ("v_production_entities", "has_production_summary", "Whether compact production context is available.", None, 1),
         ("v_production_entities", "date_start", "Start of available production context date range.", None, 1),
         ("v_production_entities", "date_end", "End of available production context date range.", None, 1),
+        ("v_production_entities", "metrics", "Comma-separated production metrics available in the compact context.", None, 1),
+        ("v_timeline_events", "event_name", "Timeline event name.", None, 1),
+        ("v_timeline_events", "event_date", "Timeline event date.", None, 1),
+        ("v_timeline_events", "category", "Timeline event category.", None, 1),
+        ("v_timeline_events", "description", "Timeline event description.", None, 1),
+        ("v_schema_tables", "table_name", "AI-visible table or view name.", None, 1),
+        ("v_schema_tables", "display_name", "Human-readable table display name.", None, 1),
+        ("v_schema_tables", "description", "Short table description.", None, 1),
     ]
     connection.executemany("INSERT INTO column_metadata VALUES (?, ?, ?, ?, ?)", columns)
+
+
+def _actual_columns(connection: sqlite3.Connection, table_name: str) -> list[str]:
+    escaped = str(table_name).replace('"', '""')
+    try:
+        rows = connection.execute(f'PRAGMA table_info("{escaped}")').fetchall()
+    except sqlite3.Error:
+        return []
+    return [str(row["name"]) for row in rows]
 
 
 def build_schema_context(connection: sqlite3.Connection) -> dict[str, Any]:
@@ -264,13 +297,27 @@ def build_schema_context(connection: sqlite3.Connection) -> dict[str, Any]:
             """,
             (table["table_name"],),
         ).fetchall()
+        metadata_by_column = {str(row["column_name"]): row for row in columns}
+        actual_columns = _actual_columns(connection, str(table["table_name"]))
+        column_names = actual_columns or [str(row["column_name"]) for row in columns]
         tables.append(
             {
                 "table_name": table["table_name"],
                 "display_name": table["display_name"],
                 "description": table["description"],
                 "grain": table["grain"],
-                "columns": [dict(row) for row in columns],
+                "columns": [
+                    {
+                        "column_name": column_name,
+                        "description": (
+                            metadata_by_column[column_name]["description"]
+                            if column_name in metadata_by_column
+                            else f"SQLite column {column_name}."
+                        ),
+                        "unit": metadata_by_column[column_name]["unit"] if column_name in metadata_by_column else None,
+                    }
+                    for column_name in column_names
+                ],
             }
         )
     return {
@@ -283,4 +330,3 @@ def build_schema_context(connection: sqlite3.Connection) -> dict[str, Any]:
             "Tables marked is_ai_visible=0 are hidden from generated SQL.",
         ],
     }
-
